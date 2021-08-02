@@ -1,10 +1,12 @@
-let scroll = 0
-temp = 1
-var cameraZ = 300
+// let scroll = 0
+// temp = 1
+// var cameraZ = 300
 
 function setup() {
     createCanvas(400, 400, WEBGL);
     hc = createGraphics(400, 400, WEBGL) // hidden canvas
+
+    // meant to be a scalable solution to keeping track of boxes.
     showDict = { "showCube": true }
     x = 0
 }
@@ -30,7 +32,7 @@ function areEqualArr(arr1, arr2) {
     if (arr1.length != arr2.length)
         return false
     for (let i = 0; i < arr1.length; i++) {
-        if (arr1[i] != arr2[2]) {
+        if (arr1[i] != arr2[i]) {
             return false
         }
     }
@@ -56,17 +58,18 @@ function mouseWheel(event) {
 }
 
 function mouseMoved() {
-    // console.log(hc.get(mouseX,mouseY))
+    // print(hc.get(mouseX, mouseY))
 
-    print(hc.get(mouseX, mouseY))
-
-    if (!areEqualArr(hc.get(mouseX, mouseY), [0, 255, 0, 255])) {
-        showDict["showCube"] = false
+    // if the mouse is pointing to a green box in the hidden canvas, we want to not show the other box.
+    if (areEqualArr(hc.get(mouseX, mouseY), [0, 255, 0, 255])) {
+        showDict["showCube"] = true
     }
     else {
-        showDict["showCube"] = true
-        // console.log("something is wrong")
+        showDict["showCube"] = false
     }
+    print(hc.get(mouseX, mouseY))
+    print(showDict)
+
 }
 
 function mcamera(z) {
@@ -82,7 +85,8 @@ function draw() {
     background(220);
     hc.background(0)
 
-    mcamera(cameraZ)
+    // My implementation of orbital control to integrate the hidden canvas
+    // mcamera(cameraZ)
 
     boxes()
     loadPixels()
