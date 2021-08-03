@@ -67,12 +67,20 @@ function mouseMoved() {
 }
 
 
+// zoom will move 
 function mouseWheel(event) {
     print(event.delta)
-    if (event.delta < 0)
-        cameraZ -= 10
-    else
-        cameraZ += 10
+
+    if (event.delta < 0) {
+        cameraX *= 0.90
+        cameraY *= 0.90
+        cameraZ *= 0.90
+    }
+    else {
+        cameraZ *= 1.10
+        cameraY *= 1.10
+        cameraY *= 1.10
+    }
 }
 
 function keyPressed() {
@@ -83,8 +91,8 @@ function keyPressed() {
         cameraX -= 10
     }
     else if (keyCode == 68) { // D
-        print(cameraX, "you pressed a")
-        cameraX -= 10
+        print(cameraX, "you pressed D")
+        cameraX += 10
     }
 
 }
