@@ -1,7 +1,13 @@
 // let scroll = 0
 // temp = 1
-var cameraZ = 300
 var hc;
+
+// Camera Variables
+var cameraZ = 300
+var cameraX = 0
+var cameraY = 0
+
+
 
 function setup() {
     createCanvas(400, 400, WEBGL);
@@ -56,8 +62,8 @@ function mouseMoved() {
     else {
         showDict["showCube"] = false
     }
-    print(hc.get(mouseX, mouseY))
-    print(showDict)
+    // print(hc.get(mouseX, mouseY))
+    // print(showDict)
 }
 
 
@@ -69,13 +75,31 @@ function mouseWheel(event) {
         cameraZ += 10
 }
 
+function keyPressed() {
 
-function mcamera(z) {
+
+    if (keyCode == 65) { // A
+        print(cameraX, "you pressed a")
+        cameraX -= 10
+    }
+    else if (keyCode == 68) { // D
+        print(cameraX, "you pressed a")
+        cameraX -= 10
+    }
+
+}
+
+
+
+function mcamera(x, z) {
     // hc.resetMatrix()
     // resetMatrix()
-    camera(1, 1, z)
-    hc.camera(1, 1, z)
+
+    camera(x, 0, z, 0, 0, 0, 0, 1, 0)
+    hc.camera(x, 0, z, 0, 0, 0, 0, 1, 0)
 }
+
+
 
 function draw() {
 
@@ -84,7 +108,7 @@ function draw() {
     boxes()
 
     // My implementation of orbital control to integrate the hidden canvas -- Note: cameraZ is modified by 'mouseWheel' before getting passed.
-    mcamera(cameraZ)
+    mcamera(cameraX, cameraZ)
 
     // hc.background(0)
 
