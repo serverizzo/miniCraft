@@ -3,11 +3,13 @@
 var hc;
 
 // Camera Variables
+// where the camera is
 var cameraZ = 300
 var cameraX = 0
 var cameraY = 0
-
-var xzTheta = 0
+//where the camera is looking
+var centerX = 0
+var centerZ = 0
 
 
 function setup() {
@@ -89,28 +91,33 @@ function mouseWheel(event) {
 }
 
 function generateXZDistanceFromCenter() {
-    return sqrt(sq(cameraX) + sq(cameraZ))
+    return sqrt(sq(cameraX - centerX) + sq(cameraZ - centerZ))
+}
+
+// note: x should be the opposite side, z should be the adj side
+function getCurrentXZAngle() {
+    return atan(cameraX / cameraZ)
 }
 
 // returns the new x and z componenets respectfully
-function getXZComponenets() {
-    return [sin(xzTheta) * generateXZDistanceFromCenter(), cos(xzTheta) * generateXZDistanceFromCenter()]
+function getXZComponenets(theta) {
+    return [sin(theta) * generateXZDistanceFromCenter(), cos(theta) * generateXZDistanceFromCenter()]
 }
 
 function keyPressed() {
 
     // rotate left
     if (key == "A") {
-        xzTheta += 10
-        let temparr = getXZComponenets()
+        let xzTheta = getCurrentXZAngle() + 10
+        let temparr = getXZComponenets(xzTheta)
         print(temparr)
         cameraX = temparr[0]
         cameraZ = temparr[1]
     }
     // rotate right
     else if (key == "D") {
-        xzTheta -= 10
-        let temparr = getXZComponenets()
+        let xzTheta = getCurrentXZAngle() - 10
+        let temparr = getXZComponenets(xzTheta)
         print(temparr)
         cameraX = temparr[0]
         cameraZ = temparr[1]
@@ -136,12 +143,12 @@ function keyPressed() {
 
 
 
-function mcamera(x, y, z) {
+function mcamera(x, y, z, cx, cz) {
     // hc.resetMatrix()
     // resetMatrix()
 
-    camera(x, y, z, 0, 0, 0, 0, 1, 0)
-    hc.camera(x, y, z, 0, 0, 0, 0, 1, 0)
+    camera(x, y, z, cx, 0, cz, 0, 1, 0)
+    hc.camera(x, y, z, cx, 0, cz, 0, 1, 0)
 }
 
 
@@ -153,7 +160,7 @@ function draw() {
     boxes()
 
     // My implementation of orbital control to integrate the hidden canvas -- Note: cameraZ is modified by 'mouseWheel' before getting passed.
-    mcamera(cameraX, cameraY, cameraZ)
+    mcamera(cameraX, cameraY, cameraZ, centerX, centerZ)
 
     // hc.background(0)
 
