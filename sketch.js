@@ -70,16 +70,16 @@ function mouseMoved() {
 // zoom will move 
 function mouseWheel(event) {
     print(event.delta)
-
+    let s = 1.10 // ourscaler value 
     if (event.delta < 0) {
-        cameraX *= 0.90
-        cameraY *= 0.90
-        cameraZ *= 0.90
+        cameraX /= 1.10
+        cameraY /= 1.10
+        cameraZ /= 1.10
     }
     else {
+        cameraX *= 1.10
+        cameraY *= 1.10
         cameraZ *= 1.10
-        cameraY *= 1.10
-        cameraY *= 1.10
     }
 }
 
