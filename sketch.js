@@ -104,23 +104,26 @@ function getXZComponenets(theta) {
     return [sin(theta) * generateXZDistanceFromCenter(), cos(theta) * generateXZDistanceFromCenter()]
 }
 
-function keyPressed() {
+function rotateLeft(step) {
+    let xzTheta = getCurrentXZAngle() + step
+    let temparr = getXZComponenets(xzTheta)
+    cameraX = temparr[0]
+    cameraZ = temparr[1]
+}
 
-    // rotate left
+function rotateRight(step) {
+    let xzTheta = getCurrentXZAngle() - step
+    let temparr = getXZComponenets(xzTheta)
+    cameraX = temparr[0]
+    cameraZ = temparr[1]
+}
+
+function keyPressed() {
     if (key == "A") {
-        let xzTheta = getCurrentXZAngle() + 10
-        let temparr = getXZComponenets(xzTheta)
-        print(temparr)
-        cameraX = temparr[0]
-        cameraZ = temparr[1]
+        rotateLeft(10)
     }
-    // rotate right
     else if (key == "D") {
-        let xzTheta = getCurrentXZAngle() - 10
-        let temparr = getXZComponenets(xzTheta)
-        print(temparr)
-        cameraX = temparr[0]
-        cameraZ = temparr[1]
+        rotateRight(10)
     }
     // move camera up
     else if (key == "w") {
