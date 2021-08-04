@@ -7,6 +7,7 @@ var cameraZ = 300
 var cameraX = 0
 var cameraY = 0
 
+var xzTheta = 0
 
 
 function setup() {
@@ -17,6 +18,7 @@ function setup() {
     showDict = { "showCube": true }
     x = 0
     background(220)
+    angleMode(DEGREES)
 }
 
 function boxes() {
@@ -39,6 +41,9 @@ function boxes() {
 
 function mouseClicked() {
     console.log(get(mouseX, mouseY))
+    if (key == "A") {
+        print("Holding shift while clicking mouse acomplished!")
+    }
 }
 
 function areEqualArr(arr1, arr2) {
@@ -83,10 +88,42 @@ function mouseWheel(event) {
     }
 }
 
+function generateXZDistanceFromCenter() {
+    return sqrt(sq(cameraX) + sq(cameraZ))
+}
+
+// returns the new x and z componenets respectfully
+function getXZComponenets() {
+    return [sin(xzTheta) * generateXZDistanceFromCenter(), cos(xzTheta) * generateXZDistanceFromCenter()]
+}
+
 function keyPressed() {
 
-
-    if (keyCode == 65) { // A
+    // rotate left
+    if (key == "A") {
+        xzTheta += 10
+        let temparr = getXZComponenets()
+        print(temparr)
+        cameraX = temparr[0]
+        cameraZ = temparr[1]
+    }
+    // rotate right
+    else if (key == "D") {
+        xzTheta -= 10
+        let temparr = getXZComponenets()
+        print(temparr)
+        cameraX = temparr[0]
+        cameraZ = temparr[1]
+    }
+    // move camera up
+    else if (key == "w") {
+        cameraY -= 10
+    }
+    // move camera down
+    else if (key == "s") {
+        cameraY -= 10
+    }
+    else if (keyCode == 65) { // A
         print(cameraX, "you pressed a")
         cameraX -= 10
     }
@@ -99,12 +136,12 @@ function keyPressed() {
 
 
 
-function mcamera(x, z) {
+function mcamera(x, y, z) {
     // hc.resetMatrix()
     // resetMatrix()
 
-    camera(x, 0, z, 0, 0, 0, 0, 1, 0)
-    hc.camera(x, 0, z, 0, 0, 0, 0, 1, 0)
+    camera(x, y, z, 0, 0, 0, 0, 1, 0)
+    hc.camera(x, y, z, 0, 0, 0, 0, 1, 0)
 }
 
 
@@ -116,7 +153,7 @@ function draw() {
     boxes()
 
     // My implementation of orbital control to integrate the hidden canvas -- Note: cameraZ is modified by 'mouseWheel' before getting passed.
-    mcamera(cameraX, cameraZ)
+    mcamera(cameraX, cameraY, cameraZ)
 
     // hc.background(0)
 
