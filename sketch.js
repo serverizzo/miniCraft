@@ -172,6 +172,11 @@ function mcamera(x, y, z, cx, cz) {
     hc.camera(x, y, z, cx, 0, cz, 0, 1, 0)
 }
 
+function mTranslate(x, y, z) {
+    translate(x, y, z)
+    hc.translate(x, y, z)
+
+}
 
 
 function draw() {
@@ -180,7 +185,7 @@ function draw() {
     hc.background(0)
     boxes()
     push()
-    translate(50, 0, 0)
+    mTranslate(80, 0, 0)
     boxes()
     pop()
 
