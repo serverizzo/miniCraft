@@ -34,8 +34,7 @@ function boxes() {
         box(50)
     }
 
-    // IMPORTANT-- clear must be called otherwise the hidden canvas will have the "dragged" effect
-    hc.clear()
+
     hc.fill(0, 255, 0)
     hc.box(50)
     pop()
@@ -100,20 +99,20 @@ function getCurrentXZAngle() {
 }
 
 // returns the new x and z componenets respectfully
-function getXZComponenets(theta) {
+function getXZComponenetsForRotation(theta) {
     return [sin(theta) * generateXZDistanceFromCenter(), cos(theta) * generateXZDistanceFromCenter()]
 }
 
 function rotateLeft(step) {
     let xzTheta = getCurrentXZAngle() + step
-    let temparr = getXZComponenets(xzTheta)
+    let temparr = getXZComponenetsForRotation(xzTheta)
     cameraX = temparr[0]
     cameraZ = temparr[1]
 }
 
 function rotateRight(step) {
     let xzTheta = getCurrentXZAngle() - step
-    let temparr = getXZComponenets(xzTheta)
+    let temparr = getXZComponenetsForRotation(xzTheta)
     cameraX = temparr[0]
     cameraZ = temparr[1]
 }
@@ -181,13 +180,16 @@ function mTranslate(x, y, z) {
 
 function draw() {
 
+    // IMPORTANT-- clear must be called otherwise the hidden canvas will have the "dragged" effect
+    hc.clear()
+
     background(220);
     hc.background(0)
     boxes()
-    push()
+    // push()
     mTranslate(80, 0, 0)
     boxes()
-    pop()
+    // pop()
 
     // My implementation of orbital control to integrate the hidden canvas -- Note: cameraZ is modified by 'mouseWheel' before getting passed.
     mcamera(cameraX, cameraY, cameraZ, centerX, centerZ)
@@ -196,4 +198,6 @@ function draw() {
 
     loadPixels()
     hc.loadPixels()
+
+
 }
