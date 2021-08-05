@@ -118,6 +118,24 @@ function rotateRight(step) {
     cameraZ = temparr[1]
 }
 
+function panRight(step) {
+    let xzTheta = getCurrentXZAngle() + 90 // to make a perpendicular angle
+    let temparr = [sin(xzTheta) * step, cos(xzTheta) * step]
+    centerX += temparr[0]
+    centerZ += temparr[1]
+    cameraX += temparr[0]
+    cameraZ += temparr[1]
+}
+
+function panLeft(step) {
+    let xzTheta = getCurrentXZAngle() + 90 // to make a perpendicular angle
+    let temparr = [sin(xzTheta) * step, cos(xzTheta) * step]
+    centerX -= temparr[0]
+    centerZ -= temparr[1]
+    cameraX -= temparr[0]
+    cameraZ -= temparr[1]
+}
+
 function keyPressed() {
     if (key == "A") {
         rotateLeft(10)
@@ -135,11 +153,11 @@ function keyPressed() {
     }
     else if (keyCode == 65) { // A
         print(cameraX, "you pressed a")
-        cameraX -= 10
+        panRight(10)
     }
     else if (keyCode == 68) { // D
         print(cameraX, "you pressed D")
-        cameraX += 10
+        panLeft(10)
     }
 
 }
@@ -161,6 +179,10 @@ function draw() {
     background(220);
     hc.background(0)
     boxes()
+    push()
+    translate(50, 0, 0)
+    boxes()
+    pop()
 
     // My implementation of orbital control to integrate the hidden canvas -- Note: cameraZ is modified by 'mouseWheel' before getting passed.
     mcamera(cameraX, cameraY, cameraZ, centerX, centerZ)
