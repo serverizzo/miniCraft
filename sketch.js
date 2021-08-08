@@ -2,16 +2,6 @@
 // temp = 1
 var hc;
 
-// Camera Variables
-// where the camera is
-var cameraZ = 300
-var cameraX = 0
-var cameraY = 0
-//where the camera is looking
-var centerX = 0
-var centerZ = 0
-
-
 function setup() {
     createCanvas(400, 400, WEBGL);
     hc = createGraphics(400, 400, WEBGL) // hidden canvas
@@ -21,6 +11,9 @@ function setup() {
     x = 0
     background(220)
     angleMode(DEGREES)
+
+    c = new HcCamera()
+
 }
 
 function boxes() {
@@ -33,8 +26,6 @@ function boxes() {
         fill(255, 0, 255)
         box(50)
     }
-
-
     hc.fill(0, 255, 0)
     hc.box(50)
     pop()
@@ -78,85 +69,41 @@ function mouseWheel(event) {
     print(event.delta)
     let s = 1.10 // ourscaler value 
     if (event.delta < 0) {
-        cameraX /= 1.10
-        cameraY /= 1.10
-        cameraZ /= 1.10
+        c.cameraX /= 1.10
+        c.cameraY /= 1.10
+        c.cameraZ /= 1.10
     }
     else {
-        cameraX *= 1.10
-        cameraY *= 1.10
-        cameraZ *= 1.10
+        c.cameraX *= 1.10
+        c.cameraY *= 1.10
+        c.cameraZ *= 1.10
     }
 }
 
-function generateXZDistanceFromCenter() {
-    return sqrt(sq(cameraX - centerX) + sq(cameraZ - centerZ))
-}
 
-// note: x should be the opposite side, z should be the adj side
-function getCurrentXZAngle() {
-    return atan(cameraX / cameraZ)
-}
-
-// returns the new x and z componenets respectfully
-function getXZComponenetsForRotation(theta) {
-    return [sin(theta) * generateXZDistanceFromCenter(), cos(theta) * generateXZDistanceFromCenter()]
-}
-
-function rotateLeft(step) {
-    let xzTheta = getCurrentXZAngle() + step
-    let temparr = getXZComponenetsForRotation(xzTheta)
-    cameraX = temparr[0]
-    cameraZ = temparr[1]
-}
-
-function rotateRight(step) {
-    let xzTheta = getCurrentXZAngle() - step
-    let temparr = getXZComponenetsForRotation(xzTheta)
-    cameraX = temparr[0]
-    cameraZ = temparr[1]
-}
-
-function panRight(step) {
-    let xzTheta = getCurrentXZAngle() + 90 // to make a perpendicular angle
-    let temparr = [sin(xzTheta) * step, cos(xzTheta) * step]
-    centerX += temparr[0]
-    centerZ += temparr[1]
-    cameraX += temparr[0]
-    cameraZ += temparr[1]
-}
-
-function panLeft(step) {
-    let xzTheta = getCurrentXZAngle() + 90 // to make a perpendicular angle
-    let temparr = [sin(xzTheta) * step, cos(xzTheta) * step]
-    centerX -= temparr[0]
-    centerZ -= temparr[1]
-    cameraX -= temparr[0]
-    cameraZ -= temparr[1]
-}
 
 function keyPressed() {
     if (key == "A") {
-        rotateLeft(10)
+        c.rotateLeft(10)
     }
     else if (key == "D") {
-        rotateRight(10)
+        c.rotateRight(10)
     }
     // move camera up
     else if (key == "w") {
-        cameraY -= 10
+        c.cameraY -= 10
     }
     // move camera down
     else if (key == "s") {
-        cameraY -= 10
+        c.cameraY -= 10
     }
     else if (keyCode == 65) { // A
-        print(cameraX, "you pressed a")
-        panRight(10)
+        print(c.cameraX, "you pressed a")
+        c.panRight(10)
     }
     else if (keyCode == 68) { // D
-        print(cameraX, "you pressed D")
-        panLeft(10)
+        print(c.cameraX, "you pressed D")
+        c.panLeft(10)
     }
 
 }
@@ -166,7 +113,6 @@ function keyPressed() {
 function mcamera(x, y, z, cx, cz) {
     // hc.resetMatrix()
     // resetMatrix()
-
     camera(x, y, z, cx, 0, cz, 0, 1, 0)
     hc.camera(x, y, z, cx, 0, cz, 0, 1, 0)
 }
@@ -174,7 +120,6 @@ function mcamera(x, y, z, cx, cz) {
 function mTranslate(x, y, z) {
     translate(x, y, z)
     hc.translate(x, y, z)
-
 }
 
 
@@ -192,7 +137,7 @@ function draw() {
     // pop()
 
     // My implementation of orbital control to integrate the hidden canvas -- Note: cameraZ is modified by 'mouseWheel' before getting passed.
-    mcamera(cameraX, cameraY, cameraZ, centerX, centerZ)
+    mcamera(c.cameraX, c.cameraY, c.cameraZ, c.centerX, c.centerZ)
 
     // hc.background(0)
 
