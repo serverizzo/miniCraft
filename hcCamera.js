@@ -19,7 +19,7 @@ class HcCamera {
 
     // note: x should be the opposite side, z should be the adj side
     getCurrentXZAngle() {
-        return atan(this.cameraX / this.cameraZ)
+        return atan2(this.cameraX, this.cameraZ)
     }
 
     // returns the new x and z componenets respectfully
@@ -32,6 +32,9 @@ class HcCamera {
         let temparr = this.getXZComponenetsForRotation(xzTheta)
         this.cameraX = temparr[0]
         this.cameraZ = temparr[1]
+        print("xzTheta:", xzTheta)
+        print("cameraX:", this.cameraX)
+        print("cameraZ:", this.cameraZ)
     }
 
     rotateRight(step) {
@@ -39,6 +42,10 @@ class HcCamera {
         let temparr = this.getXZComponenetsForRotation(xzTheta)
         this.cameraX = temparr[0]
         this.cameraZ = temparr[1]
+        print("xzTheta:", xzTheta)
+        print("cameraX:", this.cameraX)
+        print("cameraZ:", this.cameraZ)
+
     }
 
     panRight(step) {
@@ -57,6 +64,18 @@ class HcCamera {
         this.centerZ -= temparr[1]
         this.cameraX -= temparr[0]
         this.cameraZ -= temparr[1]
+    }
+
+    zoomOut(step) {
+        this.cameraX /= step
+        this.cameraY /= step
+        this.cameraZ /= step
+    }
+
+    zoomIn(step) {
+        this.cameraX *= step
+        this.cameraY *= step
+        this.cameraZ *= step
     }
 
 }

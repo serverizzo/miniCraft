@@ -17,18 +17,15 @@ function setup() {
 }
 
 function boxes() {
-    push()
-    fill(255, 255, 255)
     if (showDict["showCube"] == true) {
-        box(50)
+        fill(255, 255, 255)
     }
     else { // for testing
         fill(255, 0, 255)
-        box(50)
     }
+    box(50)
     hc.fill(0, 255, 0)
     hc.box(50)
-    pop()
 }
 
 function mouseClicked() {
@@ -69,14 +66,10 @@ function mouseWheel(event) {
     print(event.delta)
     let s = 1.10 // ourscaler value 
     if (event.delta < 0) {
-        c.cameraX /= 1.10
-        c.cameraY /= 1.10
-        c.cameraZ /= 1.10
+        c.zoomOut(1.10)
     }
     else {
-        c.cameraX *= 1.10
-        c.cameraY *= 1.10
-        c.cameraZ *= 1.10
+        c.zoomIn(1.10)
     }
 }
 
@@ -122,18 +115,47 @@ function mTranslate(x, y, z) {
     hc.translate(x, y, z)
 }
 
+function mpush() {
+    hc.push()
+    push()
+}
+
+function mpop() {
+    pop()
+    hc.pop()
+}
+
 
 function draw() {
 
     // IMPORTANT-- clear must be called otherwise the hidden canvas will have the "dragged" effect
     hc.clear()
 
+    loadPixels()
+    hc.loadPixels()
+
     background(220);
     hc.background(0)
+
+    mpush()
     boxes()
+    mpop()
     // push()
+    mpush()
     mTranslate(80, 0, 0)
-    boxes()
+    boxes(50)
+    mpop()
+
+    mpush()
+    mTranslate(0, 80, 0)
+    boxes(50)
+    mpop()
+
+    mpush()
+    mTranslate(0, 0, -80)
+    boxes(50)
+    mpop()
+
     // pop()
 
     // My implementation of orbital control to integrate the hidden canvas -- Note: cameraZ is modified by 'mouseWheel' before getting passed.
@@ -141,8 +163,7 @@ function draw() {
 
     // hc.background(0)
 
-    loadPixels()
-    hc.loadPixels()
 
+    resetMatrix()
 
 }
