@@ -112,7 +112,7 @@ function mcamera(x, y, z, cx, cz) {
 
 function mTranslate(x, y, z) {
     translate(x, y, z)
-    hc.translate(x, y, z)
+    hc.translate(x, -y, z)
 }
 
 function mpush() {
