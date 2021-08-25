@@ -49,8 +49,8 @@ class HcCamera {
         print("xzTheta:", xzTheta)
         print("cameraX:", this.cameraX)
         print("cameraZ:", this.cameraZ)
-
     }
+
 
     panRight(step) {
         let xzTheta = this.getCurrentXZAngle() + 90 // to make a perpendicular angle

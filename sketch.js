@@ -86,10 +86,10 @@ function mouseDragged() {
         c.rotateLeft(c.sensitivity)
     }
     if (mouseY > c.currY) {
-        c.rotateUp(c.sensitivity)
+        c.cameraY -= c.sensitivity
     }
     if (mouseY < c.currY) {
-        c.rotateDown(c.sensitivity)
+        c.cameraY += c.sensitivity
     }
     c.currY = mouseY
     c.currX = mouseX
