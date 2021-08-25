@@ -8,7 +8,6 @@ function setup() {
 
     // meant to be a scalable solution to keeping track of boxes.
     showDict = { "showCube": true }
-    x = 0
     background(220)
     angleMode(DEGREES)
 
@@ -29,6 +28,11 @@ function boxes() {
 }
 
 function mouseClicked() {
+
+    // set current mouse postion in the camera object
+    c.currX = mouseX
+    c.currY = mouseY
+
     console.log(get(mouseX, mouseY))
     if (key == "A") {
         print("Holding shift while clicking mouse acomplished!")
@@ -73,7 +77,24 @@ function mouseWheel(event) {
     }
 }
 
+function mouseDragged() {
 
+    if (mouseX > c.currX) {
+        c.rotateRight(c.sensitivity)
+    }
+    if (mouseX < c.currX) {
+        c.rotateLeft(c.sensitivity)
+    }
+    if (mouseY > c.currY) {
+        c.rotateUp(c.sensitivity)
+    }
+    if (mouseY < c.currY) {
+        c.rotateDown(c.sensitivity)
+    }
+    c.currY = mouseY
+    c.currX = mouseX
+
+}
 
 function keyPressed() {
     if (key == "A") {
@@ -88,7 +109,7 @@ function keyPressed() {
     }
     // move camera down
     else if (key == "s") {
-        c.cameraY -= 10
+        c.cameraY += 10
     }
     else if (keyCode == 65) { // A
         print(c.cameraX, "you pressed a")
@@ -98,7 +119,6 @@ function keyPressed() {
         print(c.cameraX, "you pressed D")
         c.panLeft(10)
     }
-
 }
 
 
@@ -107,7 +127,7 @@ function mcamera(x, y, z, cx, cz) {
     // hc.resetMatrix()
     // resetMatrix()
     camera(x, y, z, cx, 0, cz, 0, 1, 0)
-    hc.camera(x, y, z, cx, 0, cz, 0, 1, 0)
+    hc.camera(x, -y, z, cx, 0, cz, 0, 1, 0)
 }
 
 function mTranslate(x, y, z) {
@@ -124,6 +144,8 @@ function mpop() {
     pop()
     hc.pop()
 }
+
+
 
 
 function draw() {

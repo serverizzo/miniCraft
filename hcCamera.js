@@ -11,6 +11,10 @@ class HcCamera {
         //where the camera is looking
         this.centerX = 0
         this.centerZ = 0
+
+        this.currX
+        this.currY
+        this.sensitivity = 2
     }
 
     generateXZDistanceFromCenter() {
