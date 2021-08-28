@@ -82,7 +82,7 @@ function mouseDragged() {
     if (mouseX > c.currX) {
         c.rotateRight(c.sensitivity)
     }
-    if (mouseX < c.currX) {
+    else if (mouseX < c.currX) {
         c.rotateLeft(c.sensitivity)
     }
     if (mouseY > c.currY) {
@@ -97,27 +97,27 @@ function mouseDragged() {
 }
 
 function keyPressed() {
-    if (key == "A") {
-        c.rotateLeft(10)
-    }
-    else if (key == "D") {
-        c.rotateRight(10)
-    }
+    // if (key == "A") {
+    //     c.rotateLeft(10)
+    // }
+    // else if (key == "D") {
+    //     c.rotateRight(10)
+    // }
     // move camera up
-    else if (key == "w") {
+    if (key == "w") {
         c.cameraY -= 10
     }
     // move camera down
     else if (key == "s") {
         c.cameraY += 10
     }
-    else if (keyCode == 65) { // A
+    else if (keyCode == 65) { // a
         print(c.cameraX, "you pressed a")
-        c.panRight(10)
+        c.panRight(c.pansensitivity)
     }
-    else if (keyCode == 68) { // D
-        print(c.cameraX, "you pressed D")
-        c.panLeft(10)
+    else if (keyCode == 68) { // d
+        print(c.cameraX, "you pressed d")
+        c.panLeft(c.pansensitivity)
     }
 }
 
@@ -179,6 +179,9 @@ function draw() {
     mpop()
 
     // pop()
+
+    // c.debug()
+    debugMode()
 
     // My implementation of orbital control to integrate the hidden canvas -- Note: cameraZ is modified by 'mouseWheel' before getting passed.
     mcamera(c.cameraX, c.cameraY, c.cameraZ, c.centerX, c.centerZ)

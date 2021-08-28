@@ -14,7 +14,8 @@ class HcCamera {
 
         this.currX
         this.currY
-        this.sensitivity = 2
+        this.sensitivity = 3
+        this.pansensitivity = 100
     }
 
     generateXZDistanceFromCenter() {
@@ -28,7 +29,8 @@ class HcCamera {
 
     // returns the new x and z componenets respectfully
     getXZComponenetsForRotation(theta) {
-        return [sin(theta) * this.generateXZDistanceFromCenter(), cos(theta) * this.generateXZDistanceFromCenter()]
+        return [sin(theta) * dist(this.cameraX, this.cameraZ, this.centerX, this.centerZ), cos(theta) * dist(this.cameraX, this.cameraZ, this.centerX, this.centerZ)]
+        // return [sin(theta) * this.generateXZDistanceFromCenter(), cos(theta) * this.generateXZDistanceFromCenter()]
     }
 
     rotateLeft(step) {
@@ -37,8 +39,7 @@ class HcCamera {
         this.cameraX = temparr[0]
         this.cameraZ = temparr[1]
         print("xzTheta:", xzTheta)
-        print("cameraX:", this.cameraX)
-        print("cameraZ:", this.cameraZ)
+        this.debug()
     }
 
     rotateRight(step) {
@@ -47,8 +48,8 @@ class HcCamera {
         this.cameraX = temparr[0]
         this.cameraZ = temparr[1]
         print("xzTheta:", xzTheta)
-        print("cameraX:", this.cameraX)
-        print("cameraZ:", this.cameraZ)
+        this.debug()
+
     }
 
 
@@ -59,15 +60,19 @@ class HcCamera {
         this.centerZ += temparr[1]
         this.cameraX += temparr[0]
         this.cameraZ += temparr[1]
+        this.debug()
     }
 
     panLeft(step) {
-        let xzTheta = this.getCurrentXZAngle() + 90 // to make a perpendicular angle
+
+
+        let xzTheta = this.getCurrentXZAngle() - 90 // to make a perpendicular angle
         let temparr = [sin(xzTheta) * step, cos(xzTheta) * step]
-        this.centerX -= temparr[0]
-        this.centerZ -= temparr[1]
-        this.cameraX -= temparr[0]
-        this.cameraZ -= temparr[1]
+        this.centerX += temparr[0]
+        this.centerZ += temparr[1]
+        this.cameraX += temparr[0]
+        this.cameraZ += temparr[1]
+        // this.debug()
     }
 
     zoomOut(step) {
@@ -80,6 +85,17 @@ class HcCamera {
         this.cameraX *= step
         this.cameraY *= step
         this.cameraZ *= step
+    }
+
+    debug() {
+        // sphere(100)
+        print("distance:", dist(this.cameraX, this.cameraZ, this.centerX, this.centerZ))
+        print("this.centerX: ", this.centerX)
+        print("this.centerZ: ", this.centerZ)
+        print("this.cameraX: ", this.cameraX)
+        print("this.cameraZ: ", this.cameraZ)
+        console.log()
+        console.log()
     }
 
 }
