@@ -113,11 +113,12 @@ function keyPressed() {
     }
     else if (keyCode == 65) { // a
         print(c.cameraX, "you pressed a")
-        c.panRight(c.pansensitivity)
+        camera.move()
+        // c.panRight(c.pansensitivity)
     }
     else if (keyCode == 68) { // d
         print(c.cameraX, "you pressed d")
-        c.panLeft(c.pansensitivity)
+        // c.panLeft(c.pansensitivity)
     }
 }
 

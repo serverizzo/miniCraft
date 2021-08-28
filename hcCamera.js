@@ -53,6 +53,7 @@ class HcCamera {
     }
 
 
+
     panRight(step) {
         let xzTheta = this.getCurrentXZAngle() + 90 // to make a perpendicular angle
         let temparr = [sin(xzTheta) * step, cos(xzTheta) * step]
