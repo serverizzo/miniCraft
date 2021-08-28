@@ -113,7 +113,7 @@ function keyPressed() {
     }
     else if (keyCode == 65) { // a
         print(c.cameraX, "you pressed a")
-        camera.move()
+        c.truckLeft(10)
         // c.panRight(c.pansensitivity)
     }
     else if (keyCode == 68) { // d
@@ -124,12 +124,7 @@ function keyPressed() {
 
 
 
-function mcamera(x, y, z, cx, cz) {
-    // hc.resetMatrix()
-    // resetMatrix()
-    camera(x, y, z, cx, 0, cz, 0, 1, 0)
-    hc.camera(x, -y, z, cx, 0, cz, 0, 1, 0)
-}
+
 
 function mTranslate(x, y, z) {
     translate(x, y, z)
@@ -185,7 +180,7 @@ function draw() {
     debugMode()
 
     // My implementation of orbital control to integrate the hidden canvas -- Note: cameraZ is modified by 'mouseWheel' before getting passed.
-    mcamera(c.cameraX, c.cameraY, c.cameraZ, c.centerX, c.centerZ)
+    c.updateCamera(hc)
 
     // hc.background(0)
 

@@ -16,7 +16,20 @@ class HcCamera {
         this.currY
         this.sensitivity = 3
         this.pansensitivity = 100
+
+        // this.hc = createGraphics(400, 400, WEBGL) // hidden canvas
+
+        this.shownCanvasCamera = createCamera()
+
     }
+
+    updateCamera(hiddencanvas) {
+        // hc.resetMatrix()
+        // resetMatrix()
+        this.shownCanvasCamera.camera(this.cameraX, this.cameraY, this.cameraZ, this.centerX, 0, this.centerZ, 0, 1, 0)
+        hiddencanvas.camera(this.cameraX, this.cameraY, this.cameraZ, this.centerX, 0, this.centerZ, 0, 1, 0)
+    }
+
 
     generateXZDistanceFromCenter() {
         return sqrt(sq(this.cameraX - this.centerX) + sq(this.cameraZ - this.centerZ))
@@ -52,7 +65,15 @@ class HcCamera {
 
     }
 
+    truckRight(step) {
+        this.shownCanvasCamera.move(step, 0, 0)
+        this.cameraX = this.shownCanvasCamera.eyeX
+        this.cameraZ = this.shownCanvasCamera.eyeZ
+    }
 
+    truckLeft(step) {
+        this.shownCanvasCamera.move(-step, 0, 0)
+    }
 
     panRight(step) {
         let xzTheta = this.getCurrentXZAngle() + 90 // to make a perpendicular angle
@@ -65,15 +86,13 @@ class HcCamera {
     }
 
     panLeft(step) {
-
-
         let xzTheta = this.getCurrentXZAngle() - 90 // to make a perpendicular angle
         let temparr = [sin(xzTheta) * step, cos(xzTheta) * step]
         this.centerX += temparr[0]
         this.centerZ += temparr[1]
         this.cameraX += temparr[0]
         this.cameraZ += temparr[1]
-        // this.debug()
+        this.debug()
     }
 
     zoomOut(step) {
