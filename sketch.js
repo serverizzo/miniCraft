@@ -80,10 +80,10 @@ function mouseWheel(event) {
 function mouseDragged() {
 
     if (mouseX > c.currX) {
-        c.rotateRight(c.sensitivity)
+        c.rotateRight(c.sensitivity, hc)
     }
     else if (mouseX < c.currX) {
-        c.rotateLeft(c.sensitivity)
+        c.rotateLeft(c.sensitivity, hc)
     }
     if (mouseY > c.currY) {
         c.cameraY -= c.sensitivity
@@ -105,19 +105,21 @@ function keyPressed() {
     // }
     // move camera up
     if (key == "w") {
-        c.cameraY -= 10
+        c.truckUp(10, hc)
     }
     // move camera down
     else if (key == "s") {
-        c.cameraY += 10
+        c.truckDown(10, hc)
     }
     else if (keyCode == 65) { // a
         print(c.cameraX, "you pressed a")
-        c.truckLeft(10)
+        c.truckLeft(10, hc)
         // c.panRight(c.pansensitivity)
     }
     else if (keyCode == 68) { // d
         print(c.cameraX, "you pressed d")
+        c.truckRight(10, hc)
+
         // c.panLeft(c.pansensitivity)
     }
 }
