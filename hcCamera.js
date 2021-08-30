@@ -46,51 +46,41 @@ class HcCamera {
         // return [sin(theta) * this.generateXZDistanceFromCenter(), cos(theta) * this.generateXZDistanceFromCenter()]
     }
 
-    // rotateLeft(step) {
-    //     let xzTheta = this.getCurrentXZAngle() + step
-    //     let temparr = this.getXZComponenetsForRotation(xzTheta)
-    //     this.shownCanvasCamera.eyeX = temparr[0]
-    //     this.shownCanvasCamera.eyeZ = temparr[1]
-    //     print("xzTheta:", xzTheta)
-    //     this.debug()
-    // }
 
     rotateLeft(step, hiddenCanvas) {
         let xzTheta = this.getCurrentXZAngle() + step
         let newpositionarr = this.getXZComponenetsForRotation(xzTheta)
-        this.shownCanvasCamera.camera(newpositionarr[0], 0, newpositionarr[1])
-        hiddenCanvas.camera(newpositionarr[0], 0, newpositionarr[1])
+        this.shownCanvasCamera.camera(newpositionarr[0], this.shownCanvasCamera.eyeY, newpositionarr[1])
+        hiddenCanvas.camera(this.shownCanvasCamera.eyeX, -(this.shownCanvasCamera.eyeY), this.shownCanvasCamera.eyeZ, this.shownCanvasCamera.centerX, this.shownCanvasCamera.centerY, this.shownCanvasCamera.centerZ)
     }
     rotateRight(step, hiddenCanvas) {
         let xzTheta = this.getCurrentXZAngle() - step
         let newpositionarr = this.getXZComponenetsForRotation(xzTheta)
-        this.shownCanvasCamera.camera(newpositionarr[0], 0, newpositionarr[1])
-        hiddenCanvas.camera(newpositionarr[0], 0, newpositionarr[1])
+        this.shownCanvasCamera.camera(newpositionarr[0], this.shownCanvasCamera.eyeY, newpositionarr[1])
+        hiddenCanvas.camera(this.shownCanvasCamera.eyeX, -(this.shownCanvasCamera.eyeY), this.shownCanvasCamera.eyeZ, this.shownCanvasCamera.centerX, this.shownCanvasCamera.centerY, this.shownCanvasCamera.centerZ)
+
     }
 
-    // rotateRight(step) {
-    //     let xzTheta = this.getCurrentXZAngle() - step
-    //     let temparr = this.getXZComponenetsForRotation(xzTheta)
-    //     this.shownCanvasCamera.eyeX = temparr[0]
-    //     this.shownCanvasCamera.eyeZ = temparr[1]
-    //     print("xzTheta:", xzTheta)
-    //     this.debug()
-    // }
 
-    truckUp(step) {
-        this.shownCanvasCamera.move(0, step, 0)
+    truckUp(step, hiddenCanvas) {
+        // this.shownCanvasCamera.eyeY -= step
+        this.shownCanvasCamera.camera(this.shownCanvasCamera.eyeX, this.shownCanvasCamera.eyeY - step, this.shownCanvasCamera.eyeZ)
+        hiddenCanvas.camera(this.shownCanvasCamera.eyeX, -(this.shownCanvasCamera.eyeY), this.shownCanvasCamera.eyeZ, this.shownCanvasCamera.centerX, this.shownCanvasCamera.centerY, this.shownCanvasCamera.centerZ)
     }
 
-    truckDown(step) {
-        this.shownCanvasCamera.move(0, -step, 0)
+    truckDown(step, hiddenCanvas) {
+        this.shownCanvasCamera.camera(this.shownCanvasCamera.eyeX, this.shownCanvasCamera.eyeY + step, this.shownCanvasCamera.eyeZ)
+        hiddenCanvas.camera(this.shownCanvasCamera.eyeX, -(this.shownCanvasCamera.eyeY), this.shownCanvasCamera.eyeZ, this.shownCanvasCamera.centerX, this.shownCanvasCamera.centerY, this.shownCanvasCamera.centerZ)
     }
 
-    truckRight(step) {
+    truckRight(step, hiddenCanvas) {
         this.shownCanvasCamera.move(step, 0, 0)
+        hiddenCanvas.camera(this.shownCanvasCamera.eyeX, -(this.shownCanvasCamera.eyeY), this.shownCanvasCamera.eyeZ)
     }
 
-    truckLeft(step) {
+    truckLeft(step, hiddenCanvas) {
         this.shownCanvasCamera.move(-step, 0, 0)
+        hiddenCanvas.camera(this.shownCanvasCamera.eyeX, -(this.shownCanvasCamera.eyeY), this.shownCanvasCamera.eyeZ, this.shownCanvasCamera.centerX, this.shownCanvasCamera.centerY, this.shownCanvasCamera.centerZ)
     }
 
     panRight(step) {
@@ -113,25 +103,26 @@ class HcCamera {
         this.debug()
     }
 
-    zoomOut(step) {
-        this.shownCanvasCamera.eyeX /= step
-        this.cameraY /= step
-        this.shownCanvasCamera.eyeZ /= step
+    zoomOut(step, hiddenCanvas) {
+        this.shownCanvasCamera.camera(this.shownCanvasCamera.eyeX / step, this.shownCanvasCamera.eyeY / step, this.shownCanvasCamera.eyeZ / step)
+        hiddenCanvas.camera(this.shownCanvasCamera.eyeX, -(this.shownCanvasCamera.eyeY), this.shownCanvasCamera.eyeZ)
     }
 
-    zoomIn(step) {
-        this.shownCanvasCamera.eyeX *= step
-        this.cameraY *= step
-        this.shownCanvasCamera.eyeZ *= step
+    zoomIn(step, hiddenCanvas) {
+        this.shownCanvasCamera.camera(this.shownCanvasCamera.eyeX * step, this.shownCanvasCamera.eyeY * step, this.shownCanvasCamera.eyeZ * step)
+        hiddenCanvas.camera(this.shownCanvasCamera.eyeX, -(this.shownCanvasCamera.eyeY), this.shownCanvasCamera.eyeZ)
     }
 
     debug() {
         // sphere(100)
-        print("distance:", dist(this.shownCanvasCamera.eyeX, this.shownCanvasCamera.eyeZ, this.centerX, this.centerZ))
+        // print("distance:", dist(this.shownCanvasCamera.eyeX, this.shownCanvasCamera.eyeZ, this.centerX, this.centerZ))
         print("this.centerX: ", this.centerX)
+        print("this.centerZ: ", this.centerY)
         print("this.centerZ: ", this.centerZ)
         print("this.shownCanvasCamera.eyeX: ", this.shownCanvasCamera.eyeX)
+        print("this.shownCanvasCamera.eyeY: ", this.shownCanvasCamera.eyeY)
         print("this.shownCanvasCamera.eyeZ: ", this.shownCanvasCamera.eyeZ)
+
         console.log()
         console.log()
     }

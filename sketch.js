@@ -70,10 +70,10 @@ function mouseWheel(event) {
     print(event.delta)
     let s = 1.10 // ourscaler value 
     if (event.delta < 0) {
-        c.zoomOut(1.10)
+        c.zoomOut(1.10, hc)
     }
     else {
-        c.zoomIn(1.10)
+        c.zoomIn(1.10, hc)
     }
 }
 
@@ -85,11 +85,13 @@ function mouseDragged() {
     else if (mouseX < c.currX) {
         c.rotateLeft(c.sensitivity, hc)
     }
+
     if (mouseY > c.currY) {
-        c.cameraY -= c.sensitivity
+        c.truckUp(5, hc)
     }
+
     if (mouseY < c.currY) {
-        c.cameraY += c.sensitivity
+        c.truckDown(5, hc)
     }
     c.currY = mouseY
     c.currX = mouseX
@@ -97,12 +99,6 @@ function mouseDragged() {
 }
 
 function keyPressed() {
-    // if (key == "A") {
-    //     c.rotateLeft(10)
-    // }
-    // else if (key == "D") {
-    //     c.rotateRight(10)
-    // }
     // move camera up
     if (key == "w") {
         c.truckUp(10, hc)
