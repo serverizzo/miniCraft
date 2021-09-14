@@ -12,18 +12,22 @@ function setup() {
     angleMode(DEGREES)
 
     c = new HcCamera()
+    bh = new BoxHasher()
 
 }
 
 function boxes() {
-    if (showDict["showCube"] == true) {
+    if (bh.colorIsUsed(hc.get(mouseX, mouseY))) {
+        // if (showDict["showCube"] == true) {
         fill(255, 255, 255)
     }
     else { // for testing
         fill(255, 0, 255)
     }
     box(50)
-    hc.fill(0, 255, 0)
+    nextHiddenColorArr = bh.getNextHash()
+    // hc.fill(0, 255, 0)
+    hc.fill(nextHiddenColorArr[0], nextHiddenColorArr[1], nextHiddenColorArr[2]) // there seems to be a problem getting the color in the hidden canvas when the fill is editied
     hc.box(50)
 }
 
@@ -54,7 +58,11 @@ function areEqualArr(arr1, arr2) {
 
 function mouseMoved() {
     // if the mouse is pointing to a green box in the hidden canvas, we want to not show the other box.
+
+    print(hc.get(mouseX, mouseY))
+
     if (areEqualArr(hc.get(mouseX, mouseY), [0, 255, 0, 255])) {
+        // if (bh.colorIsUsed(hc.get(mouseX, mouseY))) {
         showDict["showCube"] = true
     }
     else {
@@ -181,6 +189,7 @@ function draw() {
     c.updateCamera(hc)
 
     // hc.background(0)
+    bh.restartBoxHasher()
 
 
     resetMatrix()
