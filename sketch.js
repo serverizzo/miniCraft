@@ -1,6 +1,7 @@
 // let scroll = 0
 // temp = 1
 var hc;
+var bh;
 
 function setup() {
     createCanvas(400, 400, WEBGL);
@@ -17,11 +18,16 @@ function setup() {
 }
 
 function boxes() {
-    if (bh.colorIsUsed(hc.get(mouseX, mouseY))) {
+    // print("boxes (colorInUse dict value): ", bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))])
+    // print("boxes (isColorInUse function): ", bh.isColorInUse(hc.get(mouseX, mouseY)))
+
+    if (bh.isColorInUse(hc.get(mouseX, mouseY))) {
         // if (showDict["showCube"] == true) {
+        print("true condition triggering")
         fill(255, 255, 255)
     }
     else { // for testing
+        // print("false condition triggering")
         fill(255, 0, 255)
     }
     box(50)
@@ -41,6 +47,19 @@ function mouseClicked() {
     if (key == "A") {
         print("Holding shift while clicking mouse acomplished!")
     }
+
+    bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))] = true
+
+    // print(bh.isColorInUse(hc.get(mouseX, mouseY)))
+    // print(bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))])
+    // print(hc.get(mouseX, mouseY))
+    // print(bh.getKey(hc.get(mouseX, mouseY)))
+    // print(bh.colorInUse)
+    // print(bh.isColorInUse(hc.get(mouseX, mouseY)))
+
+    print("mouseClicked (colorInUse dict value): ", bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))])
+    print("mouseClicked (isColorInUse function): ", bh.isColorInUse(hc.get(mouseX, mouseY)))
+
 }
 
 function areEqualArr(arr1, arr2) {
@@ -57,17 +76,23 @@ function areEqualArr(arr1, arr2) {
 
 
 function mouseMoved() {
-    // if the mouse is pointing to a green box in the hidden canvas, we want to not show the other box.
 
     print(hc.get(mouseX, mouseY))
+    print(bh.getKey(hc.get(mouseX, mouseY)))
+    // print("Mouse moved: ", bh.getKey(hc.get(mouseX, mouseY)) in bh.colorInUse) // the value hovered over is set to true within the colorInUse dict
 
-    if (areEqualArr(hc.get(mouseX, mouseY), [0, 255, 0, 255])) {
-        // if (bh.colorIsUsed(hc.get(mouseX, mouseY))) {
-        showDict["showCube"] = true
+    // if (areEqualArr(hc.get(mouseX, mouseY), [0, 255, 0, 255])) {
+    if (bh.getKey(hc.get(mouseX, mouseY)) in bh.colorInUse) {
+        bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))] = true
     }
-    else {
-        showDict["showCube"] = false
-    }
+    // else {
+    //     bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))] = false
+    // }
+
+    print("Mouse moved (key is in dict): ", bh.getKey(hc.get(mouseX, mouseY)) in bh.colorInUse)
+    print(bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))]) // the value hovered over is set to true within the colorInUse dict
+    print("Mouse moved (colorInUse dict): ", bh.colorInUse)
+
     // print(hc.get(mouseX, mouseY))
     // print(showDict)
 }
@@ -128,10 +153,6 @@ function keyPressed() {
     }
 }
 
-
-
-
-
 function mTranslate(x, y, z) {
     translate(x, y, z)
     hc.translate(x, -y, z)
@@ -148,12 +169,12 @@ function mpop() {
 }
 
 
-
-
-function draw() {
+async function draw() {
 
     // IMPORTANT-- clear must be called otherwise the hidden canvas will have the "dragged" effect
     hc.clear()
+    bh.restartBoxHasher()
+
 
     loadPixels()
     hc.loadPixels()
@@ -189,8 +210,6 @@ function draw() {
     c.updateCamera(hc)
 
     // hc.background(0)
-    bh.restartBoxHasher()
-
 
     resetMatrix()
 
