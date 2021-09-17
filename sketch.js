@@ -28,7 +28,7 @@ function boxes() {
 
     if (areEqualArr(hc.get(mouseX, mouseY), [nextHiddenColorArr[0], nextHiddenColorArr[1], nextHiddenColorArr[2], 255])) {
         // if (showDict["showCube"] == true) {
-        print("true condition triggering")
+        // print("true condition triggering")
         fill(255, 255, 255)
     }
     else { // for testing
@@ -45,7 +45,7 @@ function mouseClicked() {
     c.currX = mouseX
     c.currY = mouseY
 
-    console.log(get(mouseX, mouseY))
+    // console.log(get(mouseX, mouseY))
     if (key == "A") {
         print("Holding shift while clicking mouse acomplished!")
     }
@@ -59,8 +59,8 @@ function mouseClicked() {
     // print(bh.colorInUse)
     // print(bh.isColorInUse(hc.get(mouseX, mouseY)))
 
-    print("mouseClicked (colorInUse dict value): ", bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))])
-    print("mouseClicked (isColorInUse function): ", bh.isColorInUse(hc.get(mouseX, mouseY)))
+    // print("mouseClicked (colorInUse dict value): ", bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))])
+    // print("mouseClicked (isColorInUse function): ", bh.isColorInUse(hc.get(mouseX, mouseY)))
 
 }
 
@@ -79,8 +79,8 @@ function areEqualArr(arr1, arr2) {
 
 function mouseMoved() {
 
-    print(hc.get(mouseX, mouseY))
-    print(bh.getKey(hc.get(mouseX, mouseY)))
+    // print(hc.get(mouseX, mouseY))
+    // print(bh.getKey(hc.get(mouseX, mouseY)))
     // print("Mouse moved: ", bh.getKey(hc.get(mouseX, mouseY)) in bh.colorInUse) // the value hovered over is set to true within the colorInUse dict
 
     // if (areEqualArr(hc.get(mouseX, mouseY), [0, 255, 0, 255])) {
@@ -91,9 +91,9 @@ function mouseMoved() {
     //     bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))] = false
     // }
 
-    print("Mouse moved (key is in dict): ", bh.getKey(hc.get(mouseX, mouseY)) in bh.colorInUse)
-    print(bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))]) // the value hovered over is set to true within the colorInUse dict
-    print("Mouse moved (colorInUse dict): ", bh.colorInUse)
+    // print("Mouse moved (key is in dict): ", bh.getKey(hc.get(mouseX, mouseY)) in bh.colorInUse)
+    // print(bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))]) // the value hovered over is set to true within the colorInUse dict
+    // print("Mouse moved (colorInUse dict): ", bh.colorInUse)
 
     // print(hc.get(mouseX, mouseY))
     // print(showDict)
