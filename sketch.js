@@ -21,7 +21,12 @@ function boxes() {
     // print("boxes (colorInUse dict value): ", bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))])
     // print("boxes (isColorInUse function): ", bh.isColorInUse(hc.get(mouseX, mouseY)))
 
-    if (bh.isColorInUse(hc.get(mouseX, mouseY))) {
+    nextHiddenColorArr = bh.getNextHash()
+    // hc.fill(0, 255, 0)
+    hc.fill(nextHiddenColorArr[0], nextHiddenColorArr[1], nextHiddenColorArr[2]) // there seems to be a problem getting the color in the hidden canvas when the fill is editied
+    hc.box(50)
+
+    if (areEqualArr(hc.get(mouseX, mouseY), [nextHiddenColorArr[0], nextHiddenColorArr[1], nextHiddenColorArr[2], 255])) {
         // if (showDict["showCube"] == true) {
         print("true condition triggering")
         fill(255, 255, 255)
@@ -31,10 +36,7 @@ function boxes() {
         fill(255, 0, 255)
     }
     box(50)
-    nextHiddenColorArr = bh.getNextHash()
-    // hc.fill(0, 255, 0)
-    hc.fill(nextHiddenColorArr[0], nextHiddenColorArr[1], nextHiddenColorArr[2]) // there seems to be a problem getting the color in the hidden canvas when the fill is editied
-    hc.box(50)
+
 }
 
 function mouseClicked() {
@@ -198,6 +200,11 @@ async function draw() {
 
     mpush()
     mTranslate(0, 0, -80)
+    boxes(50)
+    mpop()
+
+    mpush()
+    mTranslate(0, 80, -80)
     boxes(50)
     mpop()
 
