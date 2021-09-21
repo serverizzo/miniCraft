@@ -83,6 +83,16 @@ class HcCamera {
         hiddenCanvas.camera(this.shownCanvasCamera.eyeX, -(this.shownCanvasCamera.eyeY), this.shownCanvasCamera.eyeZ, this.shownCanvasCamera.centerX, this.shownCanvasCamera.centerY, this.shownCanvasCamera.centerZ)
     }
 
+    truckForward(step, hiddenCanvas) {
+        this.shownCanvasCamera.move(0, 0, -step)
+        hiddenCanvas.camera(this.shownCanvasCamera.eyeX, -(this.shownCanvasCamera.eyeY), this.shownCanvasCamera.eyeZ, this.shownCanvasCamera.centerX, this.shownCanvasCamera.centerY, this.shownCanvasCamera.centerZ)
+    }
+
+    truckBack(step, hiddenCanvas) {
+        this.shownCanvasCamera.move(0, 0, step)
+        hiddenCanvas.camera(this.shownCanvasCamera.eyeX, -(this.shownCanvasCamera.eyeY), this.shownCanvasCamera.eyeZ, this.shownCanvasCamera.centerX, this.shownCanvasCamera.centerY, this.shownCanvasCamera.centerZ)
+    }
+
     panRight(step) {
         let xzTheta = this.getCurrentXZAngle() + 90 // to make a perpendicular angle
         let temparr = [sin(xzTheta) * step, cos(xzTheta) * step]

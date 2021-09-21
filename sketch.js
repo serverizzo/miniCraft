@@ -136,11 +136,11 @@ function mouseDragged() {
 function keyPressed() {
     // move camera up
     if (key == "w") {
-        c.truckUp(10, hc)
+        // c.truckForward(10, hc) //needs improvment
     }
     // move camera down
     else if (key == "s") {
-        c.truckDown(10, hc)
+        // c.truckBack(10, hc) //needs improvment
     }
     else if (keyCode == 65) { // a
         print(c.cameraX, "you pressed a")
