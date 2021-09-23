@@ -63,8 +63,20 @@ function sixFaceBox(s) {
 
     mpush()
     mTranslate(-s / 2, 0, 0) // left face
-    mRotateX(80)
+    mRotateX(90)
     mRotateY(90)
+    planes()
+    mpop()
+
+    mpush()
+    mTranslate(0, -s / 2, 0) // top face
+    mRotateX(90)
+    planes()
+    mpop()
+
+    mpush()
+    mTranslate(0, s / 2, 0) // bottom face
+    mRotateX(90)
     planes()
     mpop()
 
@@ -108,7 +120,7 @@ function mouseClicked() {
 
     // print(bh.isColorInUse(hc.get(mouseX, mouseY)))
     // print(bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))])
-    // print(hc.get(mouseX, mouseY))
+    console.log(hc.get(mouseX, mouseY))
     // print(bh.getKey(hc.get(mouseX, mouseY)))
     // print(bh.colorInUse)
     // print(bh.isColorInUse(hc.get(mouseX, mouseY)))
