@@ -11,9 +11,64 @@ function setup() {
     showDict = { "showCube": true }
     background(220)
     angleMode(DEGREES)
+    hc.angleMode(DEGREES)
 
     c = new HcCamera()
     bh = new BoxHasher()
+
+}
+
+
+function planes(s) {
+    nextHiddenColorArr = bh.getNextHash()
+    hc.fill(nextHiddenColorArr[0], nextHiddenColorArr[1], nextHiddenColorArr[2])
+    hc.plane(50, 50, 1, 1)
+    if (areEqualArr(hc.get(mouseX, mouseY), [nextHiddenColorArr[0], nextHiddenColorArr[1], nextHiddenColorArr[2], 255])) {
+        fill(255, 255, 255)
+    }
+    else {
+        fill(255, 0, 255)
+    }
+    plane(50, 50, 1, 1)
+}
+
+function mRotateX(a) {
+    rotateX(a)
+    hc.rotateX(a)
+}
+
+function mRotateY(a) {
+    rotateY(a)
+    hc.rotateY(-a)
+}
+
+function sixFaceBox(s) {
+
+    mpush()
+    mTranslate(0, 0, s / 2) // front face
+    planes(s)
+    mpop()
+
+    mpush()
+    mTranslate(0, 0, -(s / 2)) // back face
+    planes(s)
+    mpop()
+
+    mpush()
+    mTranslate(s / 2, 0, 0) // right face
+    mRotateX(90)
+    mRotateY(90)
+    planes()
+    mpop()
+
+    mpush()
+    mTranslate(-s / 2, 0, 0) // left face
+    mRotateX(80)
+    mRotateY(90)
+    planes()
+    mpop()
+
+
 
 }
 
@@ -21,21 +76,20 @@ function boxes() {
     // print("boxes (colorInUse dict value): ", bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))])
     // print("boxes (isColorInUse function): ", bh.isColorInUse(hc.get(mouseX, mouseY)))
 
-    nextHiddenColorArr = bh.getNextHash()
-    // hc.fill(0, 255, 0)
-    hc.fill(nextHiddenColorArr[0], nextHiddenColorArr[1], nextHiddenColorArr[2]) // there seems to be a problem getting the color in the hidden canvas when the fill is editied
-    hc.box(50)
+    // nextHiddenColorArr = bh.getNextHash()
+    // hc.fill(nextHiddenColorArr[0], nextHiddenColorArr[1], nextHiddenColorArr[2]) // there seems to be a problem getting the color in the hidden canvas when the fill is editied
+    // hc.box(50)
 
-    if (areEqualArr(hc.get(mouseX, mouseY), [nextHiddenColorArr[0], nextHiddenColorArr[1], nextHiddenColorArr[2], 255])) {
-        // if (showDict["showCube"] == true) {
-        // print("true condition triggering")
-        fill(255, 255, 255)
-    }
-    else { // for testing
-        // print("false condition triggering")
-        fill(255, 0, 255)
-    }
-    box(50)
+    // if (areEqualArr(hc.get(mouseX, mouseY), [nextHiddenColorArr[0], nextHiddenColorArr[1], nextHiddenColorArr[2], 255])) {
+    //     fill(255, 255, 255)
+    // }
+    // else { 
+    //     fill(255, 0, 255)
+    // }
+    // sixFaceBox(50)
+
+    // box(50)
+    sixFaceBox(50)
 
 }
 
@@ -95,7 +149,7 @@ function mouseMoved() {
     // print(bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))]) // the value hovered over is set to true within the colorInUse dict
     // print("Mouse moved (colorInUse dict): ", bh.colorInUse)
 
-    // print(hc.get(mouseX, mouseY))
+    print(hc.get(mouseX, mouseY))
     // print(showDict)
 }
 
