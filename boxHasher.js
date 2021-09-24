@@ -2,12 +2,12 @@ class BoxHasher {
 
     constructor() {
         // must start at 1, otherwise, it may be confused with the background
-        this.boxCounter = 1;
+        this.boxCounter = 0;
         this.colorInUse = {}; // key is colors, value is boolean (true means that the color is being hovered over, false means it is not being hovered over)
     }
 
     restartBoxHasher() {
-        this.boxCounter = 1
+        this.boxCounter = 0
         // this.colorInUse = {} // make the dict empty again
     }
 

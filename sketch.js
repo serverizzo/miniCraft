@@ -2,10 +2,14 @@
 // temp = 1
 var hc;
 var bh;
+var boxArr;
+var boxSize;
+var arrSize;
 
 function setup() {
     createCanvas(400, 400, WEBGL);
     hc = createGraphics(400, 400, WEBGL) // hidden canvas
+    boxSize = 50
 
     // meant to be a scalable solution to keeping track of boxes.
     showDict = { "showCube": true }
@@ -15,6 +19,22 @@ function setup() {
 
     c = new HcCamera()
     bh = new BoxHasher()
+    boxArr = []
+    arrSize = 7
+    for (let i = 0; i < arrSize; i++) {
+        boxArr.push(new Array())
+        for (let j = 0; j < arrSize; j++) {
+            boxArr[i].push(new Array())
+            for (let k = 0; k < arrSize; k++) {
+                boxArr[i][j].push(0)
+            }
+        }
+    }
+    boxArr[Math.floor(arrSize / 2)][Math.floor(arrSize / 2)][Math.floor(arrSize / 2)] = 1 // set one box right in the middle
+    boxArr[Math.floor(arrSize / 2) - 1][Math.floor(arrSize / 2)][Math.floor(arrSize / 2)] = 1 // i sets left right (-1 sets left)
+    boxArr[Math.floor(arrSize / 2)][Math.floor(arrSize / 2) - 1][Math.floor(arrSize / 2)] = 1 // j sets up down (-1 sets up)
+    boxArr[Math.floor(arrSize / 2)][Math.floor(arrSize / 2)][Math.floor(arrSize / 2) - 1] = 1 // k sets forward back (-1 sets back)
+    print(boxArr)
 
 }
 
@@ -45,37 +65,37 @@ function mRotateY(a) {
 function sixFaceBox(s) {
 
     mpush()
-    mTranslate(0, 0, s / 2) // front face
+    mTranslate(0, 0, s / 2) // front face       1   
     planes(s)
     mpop()
 
     mpush()
-    mTranslate(0, 0, -(s / 2)) // back face
+    mTranslate(0, 0, -(s / 2)) // back face     2
     planes(s)
     mpop()
 
     mpush()
-    mTranslate(s / 2, 0, 0) // right face
+    mTranslate(s / 2, 0, 0) // right face       3
     mRotateX(90)
     mRotateY(90)
     planes()
     mpop()
 
     mpush()
-    mTranslate(-s / 2, 0, 0) // left face
+    mTranslate(-s / 2, 0, 0) // left face       4
     mRotateX(90)
     mRotateY(90)
     planes()
     mpop()
 
     mpush()
-    mTranslate(0, -s / 2, 0) // top face
+    mTranslate(0, -s / 2, 0) // top face        5
     mRotateX(90)
     planes()
     mpop()
 
     mpush()
-    mTranslate(0, s / 2, 0) // bottom face
+    mTranslate(0, s / 2, 0) // bottom face      0
     mRotateX(90)
     planes()
     mpop()
@@ -236,6 +256,29 @@ function mpop() {
     hc.pop()
 }
 
+function renderBoxes(d) { // let d be dimention
+    // assuming d is always odd, divide d by 2 then round down to get the middle index
+    mid = Math.floor(d / 2)
+    // move to a corner of the 3d grid
+
+    mpush()
+    mTranslate(-(mid * boxSize), -(mid * boxSize), -(mid * boxSize))
+    for (let i = 0; i < d; i++) {
+        for (let j = 0; j < d; j++) {
+            for (let k = 0; k < d; k++) {
+                mpush()
+                mTranslate(i * boxSize, j * boxSize, k * boxSize)
+                if (boxArr[i][j][k] == 1)
+                    boxes()
+                mpop()
+            }
+        }
+    }
+    mpop()
+
+
+}
+
 
 async function draw() {
 
@@ -250,29 +293,42 @@ async function draw() {
     background(220);
     hc.background(0)
 
-    mpush()
-    boxes()
-    mpop()
-    // push()
-    mpush()
-    mTranslate(80, 0, 0)
-    boxes(50)
-    mpop()
 
-    mpush()
-    mTranslate(0, 80, 0)
-    boxes(50)
-    mpop()
+    renderBoxes(arrSize)
+    // for (let i = 0; i < 3; i++) {
+    //     boxArr.push(new Array())
+    //     for (let j = 0; j < 3; j++) {
+    //         boxArr[i].push(new Array())
+    //         for (k = 0; k < 3; k++) {
+    //             boxArr[i][j].push(0)
+    //         }
+    //     }
+    // }
 
-    mpush()
-    mTranslate(0, 0, -80)
-    boxes(50)
-    mpop()
 
-    mpush()
-    mTranslate(0, 80, -80)
-    boxes(50)
-    mpop()
+    // mpush()
+    // boxes()
+    // mpop()
+    // // push()
+    // mpush()
+    // mTranslate(80, 0, 0)
+    // boxes(50)
+    // mpop()
+
+    // mpush()
+    // mTranslate(0, 80, 0)
+    // boxes(50)
+    // mpop()
+
+    // mpush()
+    // mTranslate(0, 0, -80)
+    // boxes(50)
+    // mpop()
+
+    // mpush()
+    // mTranslate(0, 80, -80)
+    // boxes(50)
+    // mpop()
 
     // pop()
 
