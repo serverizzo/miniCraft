@@ -6,10 +6,11 @@ var boxArr;
 var boxSize;
 var arrSize;
 var coordDict;
+var letGoOfMouse = true
 
 function setup() {
-    createCanvas(400, 400, WEBGL);
-    hc = createGraphics(400, 400, WEBGL) // hidden canvas
+    createCanvas(800, 800, WEBGL);
+    hc = createGraphics(800, 800, WEBGL) // hidden canvas
     boxSize = 50
 
     // meant to be a scalable solution to keeping track of boxes.
@@ -142,34 +143,28 @@ function boxes() {
 
 }
 
-function mouseClicked() {
-
-    // set current mouse postion in the camera object
-    c.currX = mouseX
-    c.currY = mouseY
-
-    // console.log(get(mouseX, mouseY))
-    if (key == "A") {
-        print("Holding shift while clicking mouse acomplished!")
-    }
-
-    // bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))] = true
-
-    // print(bh.isColorInUse(hc.get(mouseX, mouseY)))
-    // print(bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))])
-    console.log(hc.get(mouseX, mouseY))
-    // print(bh.getKey(hc.get(mouseX, mouseY)))
-    // print(bh.colorInUse)
-    // print(bh.isColorInUse(hc.get(mouseX, mouseY)))
-
-    // print("mouseClicked (colorInUse dict value): ", bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))])
-    // print("mouseClicked (isColorInUse function): ", bh.isColorInUse(hc.get(mouseX, mouseY)))
-
-    // 
+function detachBox() {
     temp_arr = hc.get(mouseX, mouseY)
-    print(temp_arr)
+    // If a box is not clicked, return
+    print("temp_arr", temp_arr)
+    if (temp_arr[1] == 0 && temp_arr[2] == 0 && temp_arr[0] == 0) {
+        return
+    }
     selectedBox = bh.getKey([Math.floor((temp_arr[0] - 1) / 6), Math.floor((temp_arr[1] - 1) / 6), Math.floor((temp_arr[2] - 1) / 6)])
-    print(selectedBox)
+
+    delete coordDict[selectedBox]
+}
+
+function attachBox() {
+    temp_arr = hc.get(mouseX, mouseY)
+    // If a box is not clicked, return
+    print("temp_arr", temp_arr)
+    if (temp_arr[1] == 0 && temp_arr[2] == 0 && temp_arr[0] == 0) {
+        return
+    }
+    selectedBox = bh.getKey([Math.floor((temp_arr[0] - 1) / 6), Math.floor((temp_arr[1] - 1) / 6), Math.floor((temp_arr[2] - 1) / 6)])
+
+    print("selectedBox", selectedBox)
     coordOfSelectedBox = coordDict[selectedBox]
     faceNum = temp_arr[2] % 6
     nextBoxKey = bh.getNextAssignedBoxKey()
@@ -200,9 +195,23 @@ function mouseClicked() {
             coordDict[bh.getKey(nextBoxKey)] = [coordOfSelectedBox[0], coordOfSelectedBox[1] + 1, coordOfSelectedBox[2]]
             break;
         default:
-        // code block
     }
-    print(coordDict)
+    // print(coordDict)
+}
+
+
+function mouseClicked() {
+    // // set current mouse postion in the camera object
+    c.currX = mouseX
+    c.currY = mouseY
+
+    if (mouseButton === RIGHT) {
+        print("you pressed right")
+    }
+
+    // console.log(hc.get(mouseX, mouseY))
+
+    // attachBox()
 
 }
 
@@ -350,6 +359,9 @@ function renderBoxes(d) { // let d be dimention
     mpop()
 }
 
+function mouseReleased() {
+    letGoOfMouse = true
+}
 
 async function draw() {
 
@@ -366,6 +378,26 @@ async function draw() {
 
 
     renderCoordDict()
+
+
+    if (mouseIsPressed) {
+        if (mouseButton === LEFT && letGoOfMouse) {
+            attachBox()
+            letGoOfMouse = false
+            //   ellipse(50, 50, 50, 50);
+        }
+        if (mouseButton === RIGHT) {
+            //   rect(25, 25, 50, 50);
+            detachBox()
+            letGoOfMouse = false
+        }
+        if (mouseButton === CENTER) {
+            //   triangle(23, 75, 50, 20, 78, 75);
+        }
+    }
+
+
+
 
     // renderBoxes(arrSize)
     // for (let i = 0; i < 3; i++) {
