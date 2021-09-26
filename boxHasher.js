@@ -14,16 +14,30 @@ class BoxHasher {
     getNextHash() {
         this.boxCounter += 1
         let temp = this.boxCounter
-        let lastDigit = temp % 256
+        let lastDigit = temp % 255
         temp = int(temp / 256)
-        let penultDigit = temp % 256
+        let penultDigit = temp % 255 + 1
         temp = int(temp / 256)
-        let secondDigit = temp % 256
+        let secondDigit = temp % 255 + 1
         temp = int(temp / 256)
-        let firstDigit = temp % 256
+        let firstDigit = (temp % 255) + 1
         this.colorInUse[this.getKey([secondDigit, penultDigit, lastDigit])] = false // enter into dict
         // return String(firstDigit + "_" + secondDigit + "_" + penultDigit + "_" + lastDigit + "_")
         return [secondDigit, penultDigit, lastDigit]
+    }
+
+    getNextAssignedBoxKey() { // but do not increment the boxCounter
+        let temp = this.boxCounter
+        temp += 1
+        let lastDigit = temp % 255
+        temp = int(temp / 256)
+        let penultDigit = temp % 255 + 1
+        temp = int(temp / 256)
+        let secondDigit = temp % 255 + 1
+        temp = int(temp / 256)
+        let firstDigit = (temp % 255) + 1
+        // return String(firstDigit + "_" + secondDigit + "_" + penultDigit + "_" + lastDigit + "_")
+        return [Math.floor(secondDigit / 6), Math.floor(penultDigit / 6), Math.floor(lastDigit / 6)]
     }
 
     getKey(arr) { // arr is the color of the cube face

@@ -5,6 +5,7 @@ var bh;
 var boxArr;
 var boxSize;
 var arrSize;
+var coordDict;
 
 function setup() {
     createCanvas(400, 400, WEBGL);
@@ -16,11 +17,26 @@ function setup() {
     background(220)
     angleMode(DEGREES)
     hc.angleMode(DEGREES)
-
     c = new HcCamera()
     bh = new BoxHasher()
+
+    coordDict = {
+        "0_0_0": [0, 0, 0],
+        "0_0_1": [-1, -1, 0],
+        "0_0_2": [0, -1, 1]
+        // "3": [0, 0, -1]
+    }
+
+
+
+    for (let key in coordDict) {
+        print(key, coordDict[key])
+    }
+
+
+
     boxArr = []
-    arrSize = 7
+    arrSize = 9
     for (let i = 0; i < arrSize; i++) {
         boxArr.push(new Array())
         for (let j = 0; j < arrSize; j++) {
@@ -36,13 +52,14 @@ function setup() {
     boxArr[Math.floor(arrSize / 2)][Math.floor(arrSize / 2)][Math.floor(arrSize / 2) - 1] = 1 // k sets forward back (-1 sets back)
     print(boxArr)
 
+    // frameRate(3)
 }
 
 
 function planes(s) {
     nextHiddenColorArr = bh.getNextHash()
     hc.fill(nextHiddenColorArr[0], nextHiddenColorArr[1], nextHiddenColorArr[2])
-    hc.plane(50, 50, 1, 1)
+    hc.plane(50, 50, 2, 2)
     if (areEqualArr(hc.get(mouseX, mouseY), [nextHiddenColorArr[0], nextHiddenColorArr[1], nextHiddenColorArr[2], 255])) {
         fill(255, 255, 255)
     }
@@ -136,7 +153,7 @@ function mouseClicked() {
         print("Holding shift while clicking mouse acomplished!")
     }
 
-    bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))] = true
+    // bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))] = true
 
     // print(bh.isColorInUse(hc.get(mouseX, mouseY)))
     // print(bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))])
@@ -147,6 +164,45 @@ function mouseClicked() {
 
     // print("mouseClicked (colorInUse dict value): ", bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))])
     // print("mouseClicked (isColorInUse function): ", bh.isColorInUse(hc.get(mouseX, mouseY)))
+
+    // 
+    temp_arr = hc.get(mouseX, mouseY)
+    print(temp_arr)
+    selectedBox = bh.getKey([Math.floor((temp_arr[0] - 1) / 6), Math.floor((temp_arr[1] - 1) / 6), Math.floor((temp_arr[2] - 1) / 6)])
+    print(selectedBox)
+    coordOfSelectedBox = coordDict[selectedBox]
+    faceNum = temp_arr[2] % 6
+    nextBoxKey = bh.getNextAssignedBoxKey()
+    print("nextBoxKey", nextBoxKey)
+    switch (faceNum) {
+        case 1:
+            // print("clicked front face")
+            coordDict[bh.getKey(nextBoxKey)] = [coordOfSelectedBox[0], coordOfSelectedBox[1], coordOfSelectedBox[2] + 1]
+            break;
+        case 2:
+            // print("clicked back face")
+            coordDict[bh.getKey(nextBoxKey)] = [coordOfSelectedBox[0], coordOfSelectedBox[1], coordOfSelectedBox[2] - 1]
+            break;
+        case 3:
+            // print("clicked right face")
+            coordDict[bh.getKey(nextBoxKey)] = [coordOfSelectedBox[0] + 1, coordOfSelectedBox[1], coordOfSelectedBox[2]]
+            break;
+        case 4:
+            // print("clicked left face")
+            coordDict[bh.getKey(nextBoxKey)] = [coordOfSelectedBox[0] - 1, coordOfSelectedBox[1], coordOfSelectedBox[2]]
+            break;
+        case 5:
+            // print("clicked top face")
+            coordDict[bh.getKey(nextBoxKey)] = [coordOfSelectedBox[0], coordOfSelectedBox[1] - 1, coordOfSelectedBox[2]]
+            break;
+        case 0:
+            // print("clicked bottom face")
+            coordDict[bh.getKey(nextBoxKey)] = [coordOfSelectedBox[0], coordOfSelectedBox[1] + 1, coordOfSelectedBox[2]]
+            break;
+        default:
+        // code block
+    }
+    print(coordDict)
 
 }
 
@@ -166,13 +222,17 @@ function areEqualArr(arr1, arr2) {
 function mouseMoved() {
 
     // print(hc.get(mouseX, mouseY))
+
+
+
+    // print(hc.get(mouseX, mouseY))
     // print(bh.getKey(hc.get(mouseX, mouseY)))
     // print("Mouse moved: ", bh.getKey(hc.get(mouseX, mouseY)) in bh.colorInUse) // the value hovered over is set to true within the colorInUse dict
 
     // if (areEqualArr(hc.get(mouseX, mouseY), [0, 255, 0, 255])) {
-    if (bh.getKey(hc.get(mouseX, mouseY)) in bh.colorInUse) {
-        bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))] = true
-    }
+    // if (bh.getKey(hc.get(mouseX, mouseY)) in bh.colorInUse) {
+    //     bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))] = true
+    // }
     // else {
     //     bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))] = false
     // }
@@ -181,7 +241,6 @@ function mouseMoved() {
     // print(bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))]) // the value hovered over is set to true within the colorInUse dict
     // print("Mouse moved (colorInUse dict): ", bh.colorInUse)
 
-    print(hc.get(mouseX, mouseY))
     // print(showDict)
 }
 
@@ -256,6 +315,20 @@ function mpop() {
     hc.pop()
 }
 
+
+function renderCoordDict() {
+
+    mpush()
+    for (let key in coordDict) {
+        mpush()
+        mTranslate(coordDict[str(key)][0] * boxSize, coordDict[str(key)][1] * boxSize, coordDict[str(key)][2] * boxSize)
+        boxes()
+        mpop()
+    }
+    mpop()
+}
+
+
 function renderBoxes(d) { // let d be dimention
     // assuming d is always odd, divide d by 2 then round down to get the middle index
     mid = Math.floor(d / 2)
@@ -275,8 +348,6 @@ function renderBoxes(d) { // let d be dimention
         }
     }
     mpop()
-
-
 }
 
 
@@ -294,7 +365,9 @@ async function draw() {
     hc.background(0)
 
 
-    renderBoxes(arrSize)
+    renderCoordDict()
+
+    // renderBoxes(arrSize)
     // for (let i = 0; i < 3; i++) {
     //     boxArr.push(new Array())
     //     for (let j = 0; j < 3; j++) {
@@ -304,6 +377,8 @@ async function draw() {
     //         }
     //     }
     // }
+
+
 
 
     // mpush()
