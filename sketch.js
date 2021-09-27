@@ -25,7 +25,6 @@ function setup() {
         "0_0_0": [0, 0, 0],
         "0_0_1": [-1, -1, 0],
         "0_0_2": [0, -1, 1]
-        // "3": [0, 0, -1]
     }
 
 
@@ -123,50 +122,33 @@ function sixFaceBox(s) {
 }
 
 function boxes() {
-    // print("boxes (colorInUse dict value): ", bh.colorInUse[bh.getKey(hc.get(mouseX, mouseY))])
-    // print("boxes (isColorInUse function): ", bh.isColorInUse(hc.get(mouseX, mouseY)))
-
-    // nextHiddenColorArr = bh.getNextHash()
-    // hc.fill(nextHiddenColorArr[0], nextHiddenColorArr[1], nextHiddenColorArr[2]) // there seems to be a problem getting the color in the hidden canvas when the fill is editied
-    // hc.box(50)
-
-    // if (areEqualArr(hc.get(mouseX, mouseY), [nextHiddenColorArr[0], nextHiddenColorArr[1], nextHiddenColorArr[2], 255])) {
-    //     fill(255, 255, 255)
-    // }
-    // else { 
-    //     fill(255, 0, 255)
-    // }
-    // sixFaceBox(50)
-
-    // box(50)
     sixFaceBox(50)
-
 }
 
 function detachBox() {
-    temp_arr = hc.get(mouseX, mouseY)
+    hiddenColor = hc.get(mouseX, mouseY)
     // If a box is not clicked, return
-    print("temp_arr", temp_arr)
-    if (temp_arr[1] == 0 && temp_arr[2] == 0 && temp_arr[0] == 0) {
+    print("hiddenColor", hiddenColor)
+    if (hiddenColor[1] == 0 && hiddenColor[2] == 0 && hiddenColor[0] == 0) {
         return
     }
-    selectedBox = bh.getKey([Math.floor((temp_arr[0] - 1) / 6), Math.floor((temp_arr[1] - 1) / 6), Math.floor((temp_arr[2] - 1) / 6)])
+    selectedBox = bh.getKey([Math.floor((hiddenColor[0] - 1) / 6), Math.floor((hiddenColor[1] - 1) / 6), Math.floor((hiddenColor[2] - 1) / 6)])
 
     delete coordDict[selectedBox]
 }
 
 function attachBox() {
-    temp_arr = hc.get(mouseX, mouseY)
+    hiddenColor = hc.get(mouseX, mouseY)
     // If a box is not clicked, return
-    print("temp_arr", temp_arr)
-    if (temp_arr[1] == 0 && temp_arr[2] == 0 && temp_arr[0] == 0) {
+    print("hiddenColor", hiddenColor)
+    if (hiddenColor[1] == 0 && hiddenColor[2] == 0 && hiddenColor[0] == 0) {
         return
     }
-    selectedBox = bh.getKey([Math.floor((temp_arr[0] - 1) / 6), Math.floor((temp_arr[1] - 1) / 6), Math.floor((temp_arr[2] - 1) / 6)])
+    selectedBox = bh.getKey([Math.floor((hiddenColor[0] - 1) / 6), Math.floor((hiddenColor[1] - 1) / 6), Math.floor((hiddenColor[2] - 1) / 6)])
 
     print("selectedBox", selectedBox)
     coordOfSelectedBox = coordDict[selectedBox]
-    faceNum = temp_arr[2] % 6
+    faceNum = hiddenColor[2] % 6
     nextBoxKey = bh.getNextAssignedBoxKey()
     print("nextBoxKey", nextBoxKey)
     switch (faceNum) {
@@ -196,7 +178,8 @@ function attachBox() {
             break;
         default:
     }
-    // print(coordDict)
+    print(coordDict)
+    print(bh.boxCounter)
 }
 
 
@@ -205,14 +188,7 @@ function mouseClicked() {
     c.currX = mouseX
     c.currY = mouseY
 
-    if (mouseButton === RIGHT) {
-        print("you pressed right")
-    }
-
     // console.log(hc.get(mouseX, mouseY))
-
-    // attachBox()
-
 }
 
 function areEqualArr(arr1, arr2) {
@@ -290,11 +266,11 @@ function mouseDragged() {
 function keyPressed() {
     // move camera up
     if (key == "w") {
-        // c.truckForward(10, hc) //needs improvment
+        c.truckForward(10, hc) //needs improvment
     }
     // move camera down
     else if (key == "s") {
-        // c.truckBack(10, hc) //needs improvment
+        c.truckBack(10, hc) //needs improvment
     }
     else if (keyCode == 65) { // a
         print(c.cameraX, "you pressed a")
@@ -378,66 +354,23 @@ async function draw() {
 
 
     renderCoordDict()
+    // renderBoxes(arrSize) // old implementation
 
 
     if (mouseIsPressed) {
         if (mouseButton === LEFT && letGoOfMouse) {
             attachBox()
             letGoOfMouse = false
-            //   ellipse(50, 50, 50, 50);
         }
         if (mouseButton === RIGHT && letGoOfMouse) {
-            //   rect(25, 25, 50, 50);
             detachBox()
             letGoOfMouse = false
         }
         if (mouseButton === CENTER) {
-            //   triangle(23, 75, 50, 20, 78, 75);
+            print("pressed center")
         }
     }
 
-
-
-
-    // renderBoxes(arrSize)
-    // for (let i = 0; i < 3; i++) {
-    //     boxArr.push(new Array())
-    //     for (let j = 0; j < 3; j++) {
-    //         boxArr[i].push(new Array())
-    //         for (k = 0; k < 3; k++) {
-    //             boxArr[i][j].push(0)
-    //         }
-    //     }
-    // }
-
-
-
-
-    // mpush()
-    // boxes()
-    // mpop()
-    // // push()
-    // mpush()
-    // mTranslate(80, 0, 0)
-    // boxes(50)
-    // mpop()
-
-    // mpush()
-    // mTranslate(0, 80, 0)
-    // boxes(50)
-    // mpop()
-
-    // mpush()
-    // mTranslate(0, 0, -80)
-    // boxes(50)
-    // mpop()
-
-    // mpush()
-    // mTranslate(0, 80, -80)
-    // boxes(50)
-    // mpop()
-
-    // pop()
 
     // c.debug()
     debugMode()
