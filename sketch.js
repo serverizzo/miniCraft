@@ -386,7 +386,7 @@ async function draw() {
             letGoOfMouse = false
             //   ellipse(50, 50, 50, 50);
         }
-        if (mouseButton === RIGHT) {
+        if (mouseButton === RIGHT && letGoOfMouse) {
             //   rect(25, 25, 50, 50);
             detachBox()
             letGoOfMouse = false
