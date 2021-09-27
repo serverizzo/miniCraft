@@ -22,44 +22,28 @@ function setup() {
     bh = new BoxHasher()
 
     coordDict = {
-        "0_0_0": [0, 0, 0],
-        "0_0_1": [-1, -1, 0],
-        "0_0_2": [0, -1, 1]
+        "1_1_0": [0, 0, 0],
+        "1_1_1": [-1, -1, 0],
+        "1_1_2": [0, -1, 1]
     }
-
 
 
     for (let key in coordDict) {
         print(key, coordDict[key])
     }
 
+    // print("bh.getNextHash()", bh.getNextHash())
 
-
-    boxArr = []
-    arrSize = 9
-    for (let i = 0; i < arrSize; i++) {
-        boxArr.push(new Array())
-        for (let j = 0; j < arrSize; j++) {
-            boxArr[i].push(new Array())
-            for (let k = 0; k < arrSize; k++) {
-                boxArr[i][j].push(0)
-            }
-        }
-    }
-    boxArr[Math.floor(arrSize / 2)][Math.floor(arrSize / 2)][Math.floor(arrSize / 2)] = 1 // set one box right in the middle
-    boxArr[Math.floor(arrSize / 2) - 1][Math.floor(arrSize / 2)][Math.floor(arrSize / 2)] = 1 // i sets left right (-1 sets left)
-    boxArr[Math.floor(arrSize / 2)][Math.floor(arrSize / 2) - 1][Math.floor(arrSize / 2)] = 1 // j sets up down (-1 sets up)
-    boxArr[Math.floor(arrSize / 2)][Math.floor(arrSize / 2)][Math.floor(arrSize / 2) - 1] = 1 // k sets forward back (-1 sets back)
-    print(boxArr)
-
-    // frameRate(3)
 }
 
 
 function planes(s) {
+
+    // draw hidden plane
     nextHiddenColorArr = bh.getNextHash()
     hc.fill(nextHiddenColorArr[0], nextHiddenColorArr[1], nextHiddenColorArr[2])
     hc.plane(50, 50, 2, 2)
+    //highlight shown plane on hover
     if (areEqualArr(hc.get(mouseX, mouseY), [nextHiddenColorArr[0], nextHiddenColorArr[1], nextHiddenColorArr[2], 255])) {
         fill(255, 255, 255)
     }
@@ -116,9 +100,6 @@ function sixFaceBox(s) {
     mRotateX(90)
     planes()
     mpop()
-
-
-
 }
 
 function boxes() {
@@ -144,7 +125,9 @@ function attachBox() {
     if (hiddenColor[1] == 0 && hiddenColor[2] == 0 && hiddenColor[0] == 0) {
         return
     }
-    selectedBox = bh.getKey([Math.floor((hiddenColor[0] - 1) / 6), Math.floor((hiddenColor[1] - 1) / 6), Math.floor((hiddenColor[2] - 1) / 6)])
+
+    selectedBox = bh.getKey([hiddenColor[0], hiddenColor[1], Math.floor((hiddenColor[2] - 1) / 6)])
+    // selectedBox = bh.getKey([Math.floor((hiddenColor[0] - 1) / 6), Math.floor((hiddenColor[1] - 1) / 6), Math.floor((hiddenColor[2] - 1) / 6)])
 
     print("selectedBox", selectedBox)
     coordOfSelectedBox = coordDict[selectedBox]
@@ -360,6 +343,7 @@ async function draw() {
     if (mouseIsPressed) {
         if (mouseButton === LEFT && letGoOfMouse) {
             attachBox()
+            // print(hc.get(mouseX, mouseY))
             letGoOfMouse = false
         }
         if (mouseButton === RIGHT && letGoOfMouse) {

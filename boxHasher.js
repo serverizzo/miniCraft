@@ -11,7 +11,7 @@ class BoxHasher {
         // this.colorInUse = {} // make the dict empty again
     }
 
-    getNextHash() {
+    getNextHash() { // the hash always starts at [1, 1, 0] then increments to [1, 1, 1] on the first increment (otherwise, the last number, 6, gets included. If 6 is included, our script breaks) 
         this.boxCounter += 1
         let temp = this.boxCounter
         let lastDigit = temp % 252 // mod 252 since this is the largest number divisible by 6 that is less than 255
@@ -37,7 +37,7 @@ class BoxHasher {
         temp = int(temp / 252)
         let firstDigit = (temp % 252) + 1
         // return String(firstDigit + "_" + secondDigit + "_" + penultDigit + "_" + lastDigit + "_")
-        return [Math.floor(secondDigit / 6), Math.floor(penultDigit / 6), Math.floor(lastDigit / 6)]
+        return [secondDigit, penultDigit, Math.floor(lastDigit / 6)]
     }
 
     getKey(arr) { // arr is the color of the cube face
